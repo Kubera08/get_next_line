@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abeaudui <abeaudui@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 14:59:16 by abeaudui          #+#    #+#             */
-/*   Updated: 2023/02/19 17:38:11 by abeaudui         ###   ########.fr       */
+/*   Updated: 2023/02/19 17:46:34 by abeaudui         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
 {
-	static char	*stash;
+	static char	*stash[4096];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	stash = read_and_addtostash(stash, fd);
-	if (!stash)
+	stash[fd] = read_and_addtostash(stash[fd], fd);
+	if (!stash[fd])
 		return (NULL);
-	line = extract_and_addtoline(stash);
-	stash = collect_andaddtostash(stash);
+	line = extract_and_addtoline(stash[fd]);
+	stash[fd] = collect_andaddtostash(stash[fd]);
 	return (line);
 }
 
